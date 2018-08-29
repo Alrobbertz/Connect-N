@@ -1,5 +1,7 @@
 package Players;
 
+import Referee.Referee;
+import Utilities.Board;
 import Utilities.Move;
 import Utilities.StateTree;
 
@@ -17,22 +19,6 @@ public class AutoPlayer extends Player {
 
     public Move getMove(StateTree state) {
 
-        //GENERAL NOTES
-        /*
-
-            ALL WITHIN MINIMAX
-                Make a function that returns all the possible moves
-                iterate through them
-                recursively explore those board states.
-
-
-
-
-            Implement a node class by extending StateTree
-            Implement a real tree?
-
-         */
-
         /*
         MINIMAX (s) = {
             Utility(s)      if TERMINAL-STATE(s)
@@ -41,6 +27,8 @@ public class AutoPlayer extends Player {
 
         }
          */
+
+
         ArrayList<Move> validMoves = this.getActions(state);
 
         for (int j = 0; j < state.columns; j++) {
@@ -55,7 +43,60 @@ public class AutoPlayer extends Player {
         return new Move(false, 100);
     }
 
+
+    public Move abSearch(Board board) {
+        double val = maxValue(board, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        //return the action in ACTIONS(s) with value val
+
+        return null;
+    }
+
+    public double maxValue(Board board, double alpha, double beta) {
+        if(Referee.checkForWinner(board) == this.turn) {
+            return utility(board);
+        }
+
+        Board boardCopy = board.getCopy();
+        double val = Double.NEGATIVE_INFINITY;
+        ArrayList<Move> actions = getActions(boardCopy);
+        for(Move move: actions){
+            val = Math.max(val, minValue(result(boardCopy,move), alpha, beta));
+            if(val >= beta) return val;
+            alpha = Math.max(alpha, val);
+        }
+
+        return val;
+    }
+
+    public double minValue(Board board, double alpha, double beta) {
+        if(Referee.checkForWinner(board) == this.turn) {
+            return utility(board);
+        }
+
+        Board boardCopy = board.getCopy();
+        double val = Double.POSITIVE_INFINITY;
+        ArrayList<Move> actions = getActions(boardCopy);
+        for(Move move: actions){
+            val = Math.min(val, maxValue(result(boardCopy,move), alpha, beta));
+            if(val <= alpha) return val;
+            beta = Math.min(beta, val);
+        }
+
+        return val;
+    }
+
+    public double utility(StateTree s){
+        return 0;
+    }
+
+    public Board result(Board board, Move move) {
+        board.makeMove(move);
+        return board;
+
+    }
+
     // Returns the list of all the valid moves the current player can make at a given state in the game.
+    @SuppressWarnings("Duplicates")
     public ArrayList<Move> getActions(StateTree state) {
         ArrayList<Move> validMoves = new ArrayList<Move>();
         int[][] board = state.getBoardMatrix();
@@ -65,14 +106,12 @@ public class AutoPlayer extends Player {
                     if (board[0][i] == this.turn) validMoves.add(new Move(true, i));
                 }
                 //check for valid columns
-                if (board[state.rows-1][i] == 0) validMoves.add(new Move(false, i));
+                if (board[state.rows - 1][i] == 0) validMoves.add(new Move(false, i));
             }
         }
         System.out.println(validMoves);
         return validMoves;
     }
-
-    //this is a new change
 
 }
 
