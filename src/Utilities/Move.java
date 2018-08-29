@@ -29,12 +29,5 @@ public class Move
 		return column;
 	}
 
-	@Override
-	public String toString() {
-		if(this.pop){
-			return "POP in Column: " + column;
-		} else {
-			return "DROP in Column: " + column;
-		}
-	}
+
 }

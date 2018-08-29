@@ -11,6 +11,11 @@ public class Board extends StateTree {
         this.beta = beta;
     }
 
+    public Board(StateTree s){
+        super(s.rows, s.columns, s.winNumber, s.turn, s.pop1, s.pop2, s.parent);
+        this.boardMatrix = s.getBoardMatrix();
+    }
+
     public Board getCopy () {
         Board copy = new Board(this.rows, this.columns, this.winNumber, this.turn, this.pop1, this.pop2, this.parent, this.alpha, this.beta);
 
@@ -21,6 +26,10 @@ public class Board extends StateTree {
         }
 
         return copy;
+    }
+
+    public ArrayList<StateTree> getChildren() {
+        return this.children;
     }
 
 }

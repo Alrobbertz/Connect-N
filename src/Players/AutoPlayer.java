@@ -1,6 +1,7 @@
 package Players;
 
 import Referee.Referee;
+import Utilities.Action;
 import Utilities.Board;
 import Utilities.Move;
 import Utilities.StateTree;
@@ -11,25 +12,18 @@ import java.util.ArrayList;
 public class AutoPlayer extends Player {
 
     boolean usedPop;
+    Action bestAction;
 
     public AutoPlayer(String name, int turn, int time_limit) {
         super(name, turn, time_limit); //TODO figure out the units for time_limit
         this.usedPop = false;
+        this.bestAction = new Action(false, -1);
     }
 
     public Move getMove(StateTree state) {
+        Board current_board = new Board(state);
 
-        /*
-        MINIMAX (s) = {
-            Utility(s)      if TERMINAL-STATE(s)
-            max for each possible action (MINIMAX(actions, s)) if its max's turn
-            min for each possible action (MINIMAX(actions, s)) if its min's turn
-
-        }
-         */
-
-
-        ArrayList<Move> validMoves = this.getActions(state);
+        System.out.println("Best Action Found: " + abSearch(current_board));
 
         for (int j = 0; j < state.columns; j++) {
             for (int i = 0; i < state.rows; i++) {
@@ -40,18 +34,18 @@ public class AutoPlayer extends Player {
             }
 
         }
+
         return new Move(false, 100);
     }
 
-
     public Move abSearch(Board board) {
         double val = maxValue(board, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        //return the action in ACTIONS(s) with value val
 
-        return null;
+        return bestAction;
     }
 
     public double maxValue(Board board, double alpha, double beta) {
+        System.out.println("MAX-VALUE CALLED");
         double utility = 0;
         if((utility = Referee.checkForWinner(board)) != 0) {
             return utility;
@@ -59,10 +53,13 @@ public class AutoPlayer extends Player {
 
         Board boardCopy = board.getCopy();
         double val = Double.NEGATIVE_INFINITY;
-        ArrayList<Move> actions = getActions(boardCopy);
-        for(Move move: actions){
-            val = Math.max(val, minValue(result(boardCopy,move), alpha, beta));
-            if(val >= beta) return val;
+        ArrayList<Action> possible_actions = getActions(boardCopy);
+        for(Action action: possible_actions){
+            val = Math.max(val, minValue(result(boardCopy,action), alpha, beta));
+            if(val >= beta) {
+                bestAction = action;
+                return val;
+            }
             alpha = Math.max(alpha, val);
         }
 
@@ -70,6 +67,7 @@ public class AutoPlayer extends Player {
     }
 
     public double minValue(Board board, double alpha, double beta) {
+        System.out.println("MIN-VALUE CALLED");
         double utility = 0;
         if((utility = Referee.checkForWinner(board)) != 0) {
             return utility;
@@ -77,10 +75,13 @@ public class AutoPlayer extends Player {
 
         Board boardCopy = board.getCopy();
         double val = Double.POSITIVE_INFINITY;
-        ArrayList<Move> actions = getActions(boardCopy);
-        for(Move move: actions){
-            val = Math.min(val, maxValue(result(boardCopy,move), alpha, beta));
-            if(val <= alpha) return val;
+        ArrayList<Action> possibe_actions = getActions(boardCopy);
+        for(Action action: possibe_actions){
+            val = Math.min(val, maxValue(result(boardCopy,action), alpha, beta));
+            if(val <= alpha) {
+                this.bestAction = action;
+                return val;
+            }
             beta = Math.min(beta, val);
         }
 
@@ -98,24 +99,23 @@ public class AutoPlayer extends Player {
     public Board result(Board board, Move move) {
         board.makeMove(move);
         return board;
-
     }
 
     // Returns the list of all the valid moves the current player can make at a given state in the game.
     @SuppressWarnings("Duplicates")
-    public ArrayList<Move> getActions(StateTree state) {
-        ArrayList<Move> validMoves = new ArrayList<Move>();
+    public ArrayList<Action> getActions(StateTree state) {
+        ArrayList<Action> validMoves = new ArrayList<Action>();
         int[][] board = state.getBoardMatrix();
         if (state.turn == this.turn) {
             for (int i = 0; i < state.columns; i++) {
                 if (!this.usedPop) {
-                    if (board[0][i] == this.turn) validMoves.add(new Move(true, i));
+                    if (board[0][i] == this.turn) validMoves.add(new Action(true, i));
                 }
                 //check for valid columns
-                if (board[state.rows - 1][i] == 0) validMoves.add(new Move(false, i));
+                if (board[state.rows - 1][i] == 0) validMoves.add(new Action(false, i));
             }
         }
-        System.out.println(validMoves);
+        //System.out.println(validMoves);
         return validMoves;
     }
 

@@ -1,5 +1,6 @@
 package Players;
 
+import Utilities.Action;
 import Utilities.Move;
 import Utilities.StateTree;
 
@@ -24,7 +25,7 @@ public class SimplePlayer1 extends Player {
 
     public Move getMove(StateTree state) {
 
-        ArrayList<Move> validMoves = this.getActions(state);
+        ArrayList<Action> validMoves = this.getActions(state);
 
         for (int j = 0; j < state.columns; j++) {
             for (int i = 0; i < state.rows; i++) {
@@ -37,16 +38,17 @@ public class SimplePlayer1 extends Player {
     }
 
     // Returns the list of all the valid moves the current player can make at a given state in the game.
-    public ArrayList<Move> getActions(StateTree state) {
-        ArrayList<Move> validMoves = new ArrayList<Move>();
+    @SuppressWarnings("Duplicates")
+    public ArrayList<Action> getActions(StateTree state) {
+        ArrayList<Action> validMoves = new ArrayList<Action>();
         int[][] board = state.getBoardMatrix();
         if (state.turn == this.turn) {
             for (int i = 0; i < state.columns; i++) {
                 if (!this.usedPop) {
-                    if (board[0][i] == this.turn) validMoves.add(new Move(true, i));
+                    if (board[0][i] == this.turn) validMoves.add(new Action(true, i));
                 }
                 //check for valid columns
-                if (board[state.rows-1][i] == 0) validMoves.add(new Move(false, i));
+                if (board[state.rows - 1][i] == 0) validMoves.add(new Action(false, i));
             }
         }
         System.out.println(validMoves);
