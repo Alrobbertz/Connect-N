@@ -23,6 +23,19 @@ public class AutoPlayer extends Player {
     public Move getMove(StateTree state) {
         Board current_board = new Board(state);
 
+        /* READ ME
+        Right now we're not using the alpha and beta held in each Action
+        We could switch back to using only Move if we wanted to (i think)
+
+        We also don't ever set the alpha or beta for each Board
+        so we might be able use StateTrees still.
+
+        At least we have the more powerful option implemented now.
+
+        also, it only calls MIN and MAX once for each move
+        so idk if this is a problem in those functions or if its just the terminal-test
+         */
+
         Action a = abSearch(current_board);
         System.out.println("Best Action Found: " + a);
 
