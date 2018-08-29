@@ -23,22 +23,17 @@ public class AutoPlayer extends Player {
     public Move getMove(StateTree state) {
         Board current_board = new Board(state);
 
-        System.out.println("Best Action Found: " + abSearch(current_board));
+        Action a = abSearch(current_board);
+        System.out.println("Best Action Found: " + a);
 
-        for (int j = 0; j < state.columns; j++) {
-            for (int i = 0; i < state.rows; i++) {
-                if (state.getBoardMatrix()[i][j] == 0) {
-                    return new Move(false, j);
-                }
 
-            }
-
+        if(a.getPop()){
+            usedPop = true;
         }
-
-        return new Move(false, 100);
+        return new Move(a.getPop(), a.getColumn());
     }
 
-    public Move abSearch(Board board) {
+    public Action abSearch(Board board) {
         double val = maxValue(board, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
         return bestAction;
