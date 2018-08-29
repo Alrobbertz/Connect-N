@@ -72,5 +72,7 @@ public class AutoPlayer extends Player {
         return validMoves;
     }
 
+    //this is a change
+
 }
 
