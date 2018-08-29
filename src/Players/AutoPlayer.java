@@ -3,27 +3,44 @@ package Players;
 import Utilities.Move;
 import Utilities.StateTree;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
 
-
-/**
- * This is an example of how to make a player.
- * This player is extremely simple and does no tree building
- * but its good to test against at first.
- *
- * @author Ethan Prihar
- */
-public class SimplePlayer1 extends Player {
+public class AutoPlayer extends Player {
 
     boolean usedPop;
 
-    public SimplePlayer1(String n, int t, int l) {
-        super(n, t, l);
-        usedPop = false;
+    public AutoPlayer(String name, int turn, int time_limit) {
+        super(name, turn, time_limit); //TODO figure out the units for time_limit
+        this.usedPop = false;
     }
 
     public Move getMove(StateTree state) {
 
+        //GENERAL NOTES
+        /*
+
+            ALL WITHIN MINIMAX
+                Make a function that returns all the possible moves
+                iterate through them
+                recursively explore those board states.
+
+
+
+
+            Implement a node class by extending StateTree
+            Implement a real tree?
+
+         */
+
+        /*
+        MINIMAX (s) = {
+            Utility(s)      if TERMINAL-STATE(s)
+            max for each possible action (MINIMAX(actions, s)) if its max's turn
+            min for each possible action (MINIMAX(actions, s)) if its min's turn
+
+        }
+         */
         ArrayList<Move> validMoves = this.getActions(state);
 
         for (int j = 0; j < state.columns; j++) {
@@ -31,7 +48,9 @@ public class SimplePlayer1 extends Player {
                 if (state.getBoardMatrix()[i][j] == 0) {
                     return new Move(false, j);
                 }
+
             }
+
         }
         return new Move(false, 100);
     }
@@ -54,3 +73,4 @@ public class SimplePlayer1 extends Player {
     }
 
 }
+
