@@ -52,8 +52,9 @@ public class AutoPlayer extends Player {
     }
 
     public double maxValue(Board board, double alpha, double beta) {
-        if(Referee.checkForWinner(board) == this.turn) {
-            return utility(board);
+        double utility = 0;
+        if((utility = Referee.checkForWinner(board)) != 0) {
+            return utility;
         }
 
         Board boardCopy = board.getCopy();
@@ -69,8 +70,9 @@ public class AutoPlayer extends Player {
     }
 
     public double minValue(Board board, double alpha, double beta) {
-        if(Referee.checkForWinner(board) == this.turn) {
-            return utility(board);
+        double utility = 0;
+        if((utility = Referee.checkForWinner(board)) != 0) {
+            return utility;
         }
 
         Board boardCopy = board.getCopy();
@@ -85,8 +87,12 @@ public class AutoPlayer extends Player {
         return val;
     }
 
-    public double utility(StateTree s){
-        return 0;
+    public double terminalTest(Board board) {
+        int win = Referee.checkForWinner(board);
+        if(win == 0) return 0;
+        else if(win == this.turn) return 1;
+        else if(win == 3) return 0; //todo find a better solution for this
+        else return -1;
     }
 
     public Board result(Board board, Move move) {
