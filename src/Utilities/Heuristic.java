@@ -17,7 +17,7 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
-                    System.out.println("Check Horizontal:" + " row:" + row + " col: " + column + " offset: " + offset);
+                    System.out.println("Check Horizontal:" + " row:" + row + " col: " + (column + offset) );
                     int value = data[row][column + offset];
 
                     if (value == player_turn)
@@ -73,7 +73,7 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
-                    System.out.println("row:" + row + " col: " + column + " offset: " + offset);
+                    System.out.println("Check Vertical:" + " row:" + (row + offset) + " col: " + column );
                     int value = data[row + offset][column];
 
                     if (value == player_turn)
@@ -119,7 +119,7 @@ public class Heuristic {
         }
 
         // Check diagonal
-        for (int column = 0; column < board.columns - N; column++) { // TODO Will have to change this for different N
+        for (int column =  N; column < board.columns - N; column++) { // TODO Will have to change this for different N
             for (int row = 0; row < board.rows - N; row++) {
                 int in_a_row = 0;
                 int max = 0;
@@ -127,6 +127,7 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
+                    System.out.println("Check Diagonal Forward:" + " row:" + (row + offset) + " col: " + (column + offset) );
                     int value = data[row + offset][column + offset];
 
                     if (value == player_turn)
@@ -155,6 +156,7 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) {  // TODO Will have to change this for different N
+                    System.out.println("Check Diagonal Back:" + " row:" + (row + offset) + " col: " + (column - offset) );
                     int value = data[row + offset][column - offset];
 
                     if (value == player_turn)
