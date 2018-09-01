@@ -40,14 +40,16 @@ public class AutoPlayer extends Player {
         return new Move(a.getPop(), a.getColumn());
     }
 
-    public Action iterativeDeep(long startTime, long permitedTime, Board boardState){
-        for (int depth = 0; (System.nanoTime()/1000) - startTime < permitedTime; depth++) {
-            Action bestAction = abSearch(boardState);
+    public Action iterativeDeep(long startTime, int permitedTime, Board boardState){
+        for (int depth = 0; ((searchTime*searchTime)/1000) < permitedTime; depth++) {
+            long startSearch = System.nanoTime();
+            Action bestAction = abSearch(boardState, depth);
+            long searchTime =+ (System.nanoTime() - startSearch);
         }
         return bestAction;
     }
 
-    public Action abSearch(Board board) {
+    public Action abSearch(Board board, int depth) {
         double val = maxValue(board, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         System.out.println("Original MAX-VALUE returned with: " + val);
         return bestAction;
