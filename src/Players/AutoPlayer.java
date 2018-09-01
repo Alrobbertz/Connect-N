@@ -57,8 +57,9 @@ public class AutoPlayer extends Player {
         System.out.println("MAX-VALUE CALLED A: " + alpha + " B: " + beta);
         double utility = 0;
         if((utility = terminalTest(board)) != 0) {
-            System.out.println("terminalTest() Returned a non-zero utility: " + utility);
-            return Heuristic.utility(board, this.turn);
+            utility = Heuristic.utility(board, this.turn);
+            System.out.println("Heuristic.utility() Returned a non-zero utility: " + utility);
+            return utility;
         }
 
         Board boardCopy = board.getCopy();
@@ -69,6 +70,7 @@ public class AutoPlayer extends Player {
                 System.out.println("val >= beta: " + val + " Action Found: " + action);
                 bestAction = action;                        // Not Part of the pseudocde
                 //return val;                               // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
+                beta = val;
             }
             alpha = Math.max(alpha, val);
         }
@@ -80,9 +82,10 @@ public class AutoPlayer extends Player {
     public double minValue(Board board, double alpha, double beta) {
         System.out.println("MIN-VALUE CALLED A: " + alpha + " B: " + beta);
         double utility = 0;
-        if((utility = terminalTest(board)) != 0) {
-            System.out.println("terminalTest() Returned a non-zero utility: " + utility);
-            return Heuristic.utility(board, this.turn);
+        if((terminalTest(board)) != 0) {
+            utility = Heuristic.utility(board, this.turn);
+            System.out.println("Heuristic.utility() Returned a non-zero utility: " + utility);
+            return utility;
         }
 
         Board boardCopy = board.getCopy();
@@ -91,7 +94,8 @@ public class AutoPlayer extends Player {
             val = Math.min(val, maxValue(result(boardCopy,action), alpha, beta));
             if(val <= alpha) {
                 System.out.println("val <= alpha: " + val + " Action Found: " + action);
-                                                            //return val; // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
+                //return val; // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
+                alpha = val;
             }
             beta = Math.min(beta, val);
         }
