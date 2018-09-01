@@ -16,7 +16,7 @@ public class Heuristic {
                 int startc = -1;
                 int startr = -1;
 
-                for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
+                for (int offset = 0; offset <= N; offset++) { // TODO Will have to change this for different N
                     System.out.println("Check Horizontal:" + " row:" + row + " col: " + (column + offset) );
                     int value = data[row][column + offset];
 
@@ -72,7 +72,7 @@ public class Heuristic {
                 int startc = -1;
                 int startr = -1;
 
-                for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
+                for (int offset = 0; offset <= N; offset++) { // TODO Will have to change this for different N
                     System.out.println("Check Vertical:" + " row:" + (row + offset) + " col: " + column );
                     int value = data[row + offset][column];
 
@@ -126,7 +126,7 @@ public class Heuristic {
                 int startc = -1;
                 int startr = -1;
 
-                for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
+                for (int offset = 0; offset <= N; offset++) { // TODO Will have to change this for different N
                     System.out.println("Check Diagonal Forward:" + " row:" + (row + offset) + " col: " + (column + offset) );
                     int value = data[row + offset][column + offset];
 
@@ -155,7 +155,7 @@ public class Heuristic {
                 int startc = -1;
                 int startr = -1;
 
-                for (int offset = 0; offset < N; offset++) {  // TODO Will have to change this for different N
+                for (int offset = 0; offset <= N; offset++) {  // TODO Will have to change this for different N
                     System.out.println("Check Diagonal Back:" + " row:" + (row + offset) + " col: " + (column - offset) );
                     int value = data[row + offset][column - offset];
 
