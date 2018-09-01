@@ -126,12 +126,12 @@ public class AutoPlayer extends Player {
         //System.out.println(validMoves);
         return validMoves;
     }
-    public Action iterativeDeep(long startTime, long permitedTime, board boardState){
-        for (int depth=0; (System.nanotime()/1000)-startTime < permitedTime); depth++)
-            Action bestAction = abSearch(boardState);           
-        }
-        return bestAction;
-    }
+//    public Action iterativeDeep(long startTime, long permitedTime, board boardState){
+//        for (int depth=0; (System.nanotime()/1000)-startTime < permitedTime); depth++)
+//            Action bestAction = abSearch(boardState);
+//        }
+//        return bestAction;
+//    }
 
 }
 
