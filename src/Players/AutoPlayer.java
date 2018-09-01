@@ -29,11 +29,6 @@ public class AutoPlayer extends Player {
 
         We also don't ever set the alpha or beta for each Board
         so we might be able use StateTrees still.
-
-        At least we have the more powerful option implemented now.
-
-        also, it only calls MIN and MAX once for each move
-        so idk if this is a problem in those functions or if its just the terminal-test
          */
 
         Action a = abSearch(current_board);
@@ -46,62 +41,71 @@ public class AutoPlayer extends Player {
         return new Move(a.getPop(), a.getColumn());
     }
 
+    public Action iterativeDeep(long startTime, long permitedTime, Board boardState){
+        for (int depth = 0; (System.nanoTime()/1000) - startTime < permitedTime; depth++) {
+            Action bestAction = abSearch(boardState);
+        }
+        return bestAction;
+    }
+
     public Action abSearch(Board board) {
         double val = maxValue(board, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-
+        System.out.println("Original MAX-VALUE returned with: " + val);
         return bestAction;
     }
 
     public double maxValue(Board board, double alpha, double beta) {
-        System.out.println("MAX-VALUE CALLED");
+        System.out.println("MAX-VALUE CALLED A: " + alpha + " B: " + beta);
         double utility = 0;
-        if((utility = Referee.checkForWinner(board)) != 0) {
+        if((utility = terminalTest(board)) != 0) {
+            System.out.println("terminalTest() Returned a non-zero utility: " + utility);
             return utility;
         }
 
         Board boardCopy = board.getCopy();
         double val = Double.NEGATIVE_INFINITY;
-        ArrayList<Action> possible_actions = getActions(boardCopy);
-        for(Action action: possible_actions){
+        for(Action action: getActions(boardCopy)){          //For each of the possible actions
             val = Math.max(val, minValue(result(boardCopy,action), alpha, beta));
             if(val >= beta) {
-                bestAction = action;
-                return val;
+                System.out.println("val >= beta: " + val + " Action Found: " + action);
+                bestAction = action;                        // Not Part of the pseudocde
+                //return val;                               // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
             }
             alpha = Math.max(alpha, val);
         }
 
+        System.out.println("MAX-VALUE hit bottom. Returns: " + val);
         return val;
     }
 
     public double minValue(Board board, double alpha, double beta) {
-        System.out.println("MIN-VALUE CALLED");
+        System.out.println("MIN-VALUE CALLED A: " + alpha + " B: " + beta);
         double utility = 0;
-        if((utility = Referee.checkForWinner(board)) != 0) {
+        if((utility = terminalTest(board)) != 0) {
+            System.out.println("terminalTest() Returned a non-zero utility: " + utility);
             return utility;
         }
 
         Board boardCopy = board.getCopy();
         double val = Double.POSITIVE_INFINITY;
-        ArrayList<Action> possibe_actions = getActions(boardCopy);
-        for(Action action: possibe_actions){
+        for(Action action: getActions(boardCopy)){          // For each of the possible actions
             val = Math.min(val, maxValue(result(boardCopy,action), alpha, beta));
             if(val <= alpha) {
-                this.bestAction = action;
-                return val;
+                System.out.println("val <= alpha: " + val + " Action Found: " + action);
+                                                            //return val; // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
             }
             beta = Math.min(beta, val);
         }
 
+        System.out.println("MIN-VALUE hit bottom. Returns: " + val);
         return val;
     }
 
     public double terminalTest(Board board) {
         int win = Referee.checkForWinner(board);
-        if(win == 0) return 0;
-        else if(win == this.turn) return 1;
-        else if(win == 3) return 0; //todo find a better solution for this
-        else return -1;
+        if(win == this.turn) return 1;
+        else if(win == Math.abs(this.turn - 3)) return -1;
+        else return 0; //todo find a better solution for this
     }
 
     public Board result(Board board, Move move) {
@@ -126,12 +130,7 @@ public class AutoPlayer extends Player {
         //System.out.println(validMoves);
         return validMoves;
     }
-//    public Action iterativeDeep(long startTime, long permitedTime, board boardState){
-//        for (int depth=0; (System.nanotime()/1000)-startTime < permitedTime); depth++)
-//            Action bestAction = abSearch(boardState);
-//        }
-//        return bestAction;
-//    }
+
 
 }
 
