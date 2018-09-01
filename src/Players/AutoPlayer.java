@@ -30,7 +30,7 @@ public class AutoPlayer extends Player {
         long start_time = System.nanoTime();
         System.out.println("Start Time: " + start_time);
 
-        Action a = abSearch(current_board);
+        Action a = abSearch(current_board, 0);
         System.out.println("Best Action Found: " + a);
 
 
@@ -41,10 +41,11 @@ public class AutoPlayer extends Player {
     }
 
     public Action iterativeDeep(long startTime, int permitedTime, Board boardState){
+        long searchTime =0;
         for (int depth = 0; ((searchTime*searchTime)/1000) < permitedTime; depth++) {
             long startSearch = System.nanoTime();
             Action bestAction = abSearch(boardState, depth);
-            long searchTime =+ (System.nanoTime() - startSearch);
+            searchTime =+ (System.nanoTime() - startSearch);
         }
         return bestAction;
     }
