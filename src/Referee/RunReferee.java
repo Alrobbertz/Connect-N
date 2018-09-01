@@ -17,9 +17,9 @@ public class RunReferee {
 		// Match parameter
 		// You can modify them
 		int timeLimit = 30;
-		int boardRows = 4;
-		int boardColumns = 5;
-		int winNumber = 3;
+		int boardRows = 6;
+		int boardColumns = 7;
+		int winNumber = 4;
 		int battleDurationLimit = 3600;
 		// End of modifications
 		

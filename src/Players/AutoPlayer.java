@@ -1,10 +1,7 @@
 package Players;
 
 import Referee.Referee;
-import Utilities.Action;
-import Utilities.Board;
-import Utilities.Move;
-import Utilities.StateTree;
+import Utilities.*;
 
 import javax.swing.plaf.nimbus.State;
 import java.util.ArrayList;
@@ -30,6 +27,8 @@ public class AutoPlayer extends Player {
         We also don't ever set the alpha or beta for each Board
         so we might be able use StateTrees still.
          */
+        long start_time = System.nanoTime();
+        System.out.println("Start Time: " + start_time);
 
         Action a = abSearch(current_board);
         System.out.println("Best Action Found: " + a);
@@ -59,7 +58,7 @@ public class AutoPlayer extends Player {
         double utility = 0;
         if((utility = terminalTest(board)) != 0) {
             System.out.println("terminalTest() Returned a non-zero utility: " + utility);
-            return utility;
+            return Heuristic.utility(board, this.turn);
         }
 
         Board boardCopy = board.getCopy();
@@ -83,7 +82,7 @@ public class AutoPlayer extends Player {
         double utility = 0;
         if((utility = terminalTest(board)) != 0) {
             System.out.println("terminalTest() Returned a non-zero utility: " + utility);
-            return utility;
+            return Heuristic.utility(board, this.turn);
         }
 
         Board boardCopy = board.getCopy();
