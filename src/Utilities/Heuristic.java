@@ -17,7 +17,8 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
-                    int value = data[column + offset][row];
+                    System.out.println("Check Horizontal:" + " row:" + row + " col: " + column + " offset: " + offset);
+                    int value = data[row][column + offset];
 
                     if (value == player_turn)
                     {
@@ -46,7 +47,8 @@ public class Heuristic {
 
                     boolean seq = true;
                     for (int i = 0; i < N; i++) { // TODO Will have to change this for different N
-                        int v = data[startc - offset + i][row];
+                        int v = data[row][startc - offset + i];
+
                         seq = seq && (v == 0 || v == player_turn);
 
                         if (!seq) { break; }
@@ -71,7 +73,8 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
-                    int value = data[column][row + offset];
+                    System.out.println("row:" + row + " col: " + column + " offset: " + offset);
+                    int value = data[row + offset][column];
 
                     if (value == player_turn)
                     {
@@ -98,7 +101,8 @@ public class Heuristic {
 
                     boolean seq = true;
                     for (int i = 0; i < N; i++) { // TODO Will have to change this for different N
-                        int v = data[column][startr - offset + i];
+                        int v = data[startr - offset + i][column];
+
                         seq = seq && (v == 0 || v == player_turn);
 
                         if (!seq) { break; }
@@ -123,7 +127,7 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) { // TODO Will have to change this for different N
-                    int value = data[column + offset][row + offset];
+                    int value = data[row + offset][column + offset];
 
                     if (value == player_turn)
                     {
@@ -151,7 +155,7 @@ public class Heuristic {
                 int startr = -1;
 
                 for (int offset = 0; offset < N; offset++) {  // TODO Will have to change this for different N
-                    int value = data[column + offset][row - offset];
+                    int value = data[row + offset][column - offset];
 
                     if (value == player_turn)
                     {
