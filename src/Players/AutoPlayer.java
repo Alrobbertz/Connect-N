@@ -56,7 +56,7 @@ public class AutoPlayer extends Player {
     public double maxValue(Board board, double alpha, double beta) {
         System.out.println("MAX-VALUE CALLED A: " + alpha + " B: " + beta);
         double utility = 0;
-        if((utility = terminalTest(board)) != 0) {
+        if(terminalTest(board) != 0) {
             utility = Heuristic.utility(board, this.turn);
             System.out.println("Heuristic.utility() Returned a non-zero utility: " + utility);
             return utility;
@@ -67,7 +67,7 @@ public class AutoPlayer extends Player {
         for(Action action: getActions(boardCopy)){          //For each of the possible actions
             val = Math.max(val, minValue(result(boardCopy,action), alpha, beta));
             if(val >= beta) {
-                System.out.println("val >= beta: " + val + " Action Found: " + action);
+                System.out.println("val >= beta: " + val);
                 bestAction = action;                        // Not Part of the pseudocde
                 //return val;                               // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
                 beta = val;
@@ -93,7 +93,7 @@ public class AutoPlayer extends Player {
         for(Action action: getActions(boardCopy)){          // For each of the possible actions
             val = Math.min(val, maxValue(result(boardCopy,action), alpha, beta));
             if(val <= alpha) {
-                System.out.println("val <= alpha: " + val + " Action Found: " + action);
+                System.out.println("val <= alpha: " + val);
                 //return val; // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
                 alpha = val;
             }

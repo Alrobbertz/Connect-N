@@ -18,7 +18,7 @@ public class Action extends Move{
         } else {
             str += "DROP in Column: " + column;
         }
-        str += " Alpha: " + alpha + " Beta: " + beta + "}";
+        str += "}";
         return str;
     }
 
