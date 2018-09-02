@@ -26,7 +26,7 @@ public class RunReferee {
 		
 		
 		Player player1 = (Player) new LinePlayer("LinePlayer", 1, timeLimit);
-		Player player2 = (Player) new AutoPlayer("AutoPlayer2", 2, timeLimit);
+		Player player2 = (Player) new AutoPlayer2("AutoPlayer2", 2, timeLimit);
 
 		Referee referee = new Referee();
 		referee.setOut(System.out);

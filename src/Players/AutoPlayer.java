@@ -51,13 +51,13 @@ public class AutoPlayer extends Player {
     }
 
     public Action abSearch(Board board, int depth) {
-        double val = maxValue(board, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+        double val = maxValue(board, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, 0);
         System.out.println("Original MAX-VALUE returned with: " + val);
         return bestAction;
     }
 
-    public double maxValue(Board board, double alpha, double beta) {
-        System.out.println("MAX-VALUE CALLED A: " + alpha + " B: " + beta);
+    public double maxValue(Board board, double alpha, double beta, int depth) {
+        System.out.println("== MAX-VALUE CALLED Depth: " + depth + " A: " + alpha + " B: " + beta);
         double utility = 0;
         if(terminalTest(board) != 0) {
             utility = Heuristic.utility(board, this.turn);
@@ -68,7 +68,7 @@ public class AutoPlayer extends Player {
         Board boardCopy = board.getCopy();
         double val = Double.NEGATIVE_INFINITY;
         for(Action action: getActions(boardCopy)){          //For each of the possible actions
-            val = Math.max(val, minValue(result(boardCopy,action), alpha, beta));
+            val = Math.max(val, minValue(result(boardCopy,action), alpha, beta, depth++));
             if(val >= beta) {
                 System.out.println("val >= beta: " + val);
                 bestAction = action;                        // Not Part of the pseudocde
@@ -82,8 +82,8 @@ public class AutoPlayer extends Player {
         return val;
     }
 
-    public double minValue(Board board, double alpha, double beta) {
-        System.out.println("MIN-VALUE CALLED A: " + alpha + " B: " + beta);
+    public double minValue(Board board, double alpha, double beta, int depth) {
+        System.out.println("== MIN-VALUE CALLED Depth: " + depth + " A: " + alpha + " B: " + beta);
         double utility = 0;
         if((terminalTest(board)) != 0) {
             utility = Heuristic.utility(board, this.turn);
@@ -94,7 +94,7 @@ public class AutoPlayer extends Player {
         Board boardCopy = board.getCopy();
         double val = Double.POSITIVE_INFINITY;
         for(Action action: getActions(boardCopy)){          // For each of the possible actions
-            val = Math.min(val, maxValue(result(boardCopy,action), alpha, beta));
+            val = Math.min(val, maxValue(result(boardCopy,action), alpha, beta, depth++));
             if(val <= alpha) {
                 System.out.println("val <= alpha: " + val);
                 //return val; // This is in the book's pseudocode for AB-Search but it terminates our algorithm after 2ply
