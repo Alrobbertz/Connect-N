@@ -119,7 +119,6 @@ public class Heuristic {
         }
 
         // Check diagonal
-        System.out.println("Check Diagonal Outside Loops Forwards");
         for (int column =  N; column < board.columns - N; column++) { // TODO Will have to change this for different N
             System.out.println("Check Diagonal Inside Column Loop Forwards"); 
             for (int row = 0; row < board.rows - N; row++) {
