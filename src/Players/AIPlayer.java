@@ -18,9 +18,9 @@ public class AIPlayer extends Player {
         Board current_board = new Board(state);
 
         long start_time = System.nanoTime();
-        long permittedTtime = timeLimit * (long) (Math.pow(10, 9)); //TODO change this to real time_limit
+        long permittedTime = 10 * (long) (Math.pow(10, 9)); //TODO change this to real time_limit
         System.out.println("Start Time: " + start_time / (long)(Math.pow(10, 9)) + " seconds");
-        System.out.println("Permitted Time: " + permittedTtime / (long)(Math.pow(10, 9)) + " seconds");
+        System.out.println("Permitted Time: " + permittedTime / (long)(Math.pow(10, 9)) + " seconds");
 
 
         // FOR MINIMAX
@@ -31,7 +31,7 @@ public class AIPlayer extends Player {
         //Action your_move = abSearch(current_board, 0);
 
         // FOR ITERATIVE-DEEPENING
-        Action your_move = iterativeDeep(current_board, start_time, permittedTtime);
+        Action your_move = iterativeDeep(current_board, start_time, permittedTime);
 
         if (your_move.getPop()) {
             usedPop = true;

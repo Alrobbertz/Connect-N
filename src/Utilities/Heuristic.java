@@ -119,27 +119,22 @@ public class Heuristic {
         }
 
         // Check diagonal
-        for (int column =  N; column < board.columns - N; column++) { // TODO Will have to change this for different N
-            System.out.println("Check Diagonal Inside Column Loop Forwards"); 
-            for (int row = 0; row < board.rows - N; row++) {
-                System.out.println("Check Diagonal Row Loop Forward");
+        for (int column =  0; column < board.columns; column++) { // TODO Will have to change this for different N
+            //System.out.println("Check Diagonal Inside Column Loop Forwards");
+            for (int row = 0; row < board.rows; row++) {
+                //System.out.println("Check Diagonal Row Loop Forward");
                 int in_a_row = 0;
-                int max = 0;
-                int startc = -1;
-                int startr = -1;
+                int maxConnection = 0;
 
                 for (int offset = 0; offset <= N; offset++) { // TODO Will have to change this for different N
-                    System.out.println("Check Diagonal Forward:" + " row:" + (row + offset) + " col: " + (column + offset) );
-                    int value = data[row + offset][column + offset];
+                    //System.out.println("Check Diagonal Forward:" + " row:" + (row + offset) + " col: " + (column + offset) );
+                    int value = getValue(board, row + offset, column + offset);
 
                     if (value == player_turn)
                     {
                         in_a_row += 1;
-                        if (in_a_row > max) {
-                            max = in_a_row;
-
-                            startc = column + offset - (max - 1);
-                            startr = row + offset - (max - 1);
+                        if (in_a_row > maxConnection) {
+                            maxConnection = in_a_row;
                         }
                     }
                     else
@@ -148,27 +143,22 @@ public class Heuristic {
                     }
                 }
 
-                hVal += deltaheurestic(max);
+                hVal += deltaheurestic(maxConnection);
             }
 
-            for (int row = (N-1); row < board.rows; row++) { // TODO Will have to change this for different N
+            for (int row = 0; row < board.rows; row++) { // TODO Will have to change this for different N
                 int in_a_row = 0;
                 int max = 0;
-                int startc = -1;
-                int startr = -1;
 
                 for (int offset = 0; offset <= N; offset++) {  // TODO Will have to change this for different N
-                    System.out.println("Check Diagonal Back:" + " row:" + (row + offset) + " col: " + (column - offset) );
-                    int value = data[row + offset][column - offset];
+                    //System.out.println("Check Diagonal Back:" + " row:" + (row + offset) + " col: " + (column - offset) );
+                    int value = getValue(board, row + offset, column - offset);
 
                     if (value == player_turn)
                     {
                         in_a_row += 1;
                         if (in_a_row > max) {
                             max = in_a_row;
-
-                            startc = column + offset - (max - 1);
-                            startr = row - offset + (max - 1);
                         }
                     }
                     else
@@ -182,6 +172,14 @@ public class Heuristic {
         }
 
         return hVal;
+    }
+
+    private static int getValue(Board board, int row, int col){
+        if((row >= 0 && row < board.rows) && (col >= 0 && col < board.columns)){
+            return board.getBoardMatrix()[row][col];
+        }
+
+        return -1;
     }
 
     public static int deltaheurestic(int max) {
