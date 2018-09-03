@@ -12,13 +12,13 @@ public class Heuristic {
 
         // Checks the board for the horizontal pieces
         for (int row = 0; row < board.rows; row++) {
-            for (int column = 0; column < board.columns - N; column++) { // TODO Will have to change this for different N
+            for (int column = 0; column < board.columns - N; column++) {
                 int in_a_row = 0;
                 int max = 0;
                 int startc = -1;
                 int startr = -1;
                 //checks to see pieces in a horizontal row
-                for (int offset = 0; offset <= N; offset++) { // TODO Will have to change this for different N
+                for (int offset = 0; offset <= N; offset++) {
                     //System.out.println("Check Horizontal:" + " row:" + row + " col: " + (column + offset) );
                     int value = data[row][column + offset];
                     //checks if value matches the players turn
@@ -52,7 +52,7 @@ public class Heuristic {
 
                     boolean seq = true;
                     //checks the columns
-                    for (int i = 0; i < N; i++) { // TODO Will have to change this for different N
+                    for (int i = 0; i < N; i++) {
                         int v = data[row][startc - offset + i];
                         
                         seq = seq && (v == 0 || v == player_turn);
@@ -64,8 +64,8 @@ public class Heuristic {
                 }
 
                 // Only add values for open sequences or sequences of four
-                if (isopen || max == N) { // TODO Will have to change this for different N
-                    hVal += deltaheurestic(max);
+                if (isopen || max == N) {
+                    hVal += deltaheurestic(max, board.winNumber);
                 }
             }
         }
@@ -124,21 +124,21 @@ public class Heuristic {
                 }
 
                 // Only add values for open sequences or sequences of four
-                if (isopen || max == N) { // TODO Will have to change this for different N
-                    hVal += deltaheurestic(max);
+                if (isopen || max == N) {
+                    hVal += deltaheurestic(max, board.winNumber);
                 }
             }
         }
 
         // Check diagonal for pieces in a row works the same as the previous two but now is checking the diagonal
-        for (int column =  0; column < board.columns; column++) { // TODO Will have to change this for different N
+        for (int column =  0; column < board.columns; column++) {
             //System.out.println("Check Diagonal Inside Column Loop Forwards");
             for (int row = 0; row < board.rows; row++) {
                 //System.out.println("Check Diagonal Row Loop Forward");
                 int in_a_row = 0;
                 int maxConnection = 0;
 
-                for (int offset = 0; offset <= N; offset++) { // TODO Will have to change this for different N
+                for (int offset = 0; offset <= N; offset++) {
                     //System.out.println("Check Diagonal Forward:" + " row:" + (row + offset) + " col: " + (column + offset) );
                     int value = getValue(board, row + offset, column + offset);
 
@@ -155,14 +155,14 @@ public class Heuristic {
                     }
                 }
 
-                hVal += deltaheurestic(maxConnection);
+                hVal += deltaheurestic(maxConnection, board.winNumber);
             }
 
-            for (int row = 0; row < board.rows; row++) { // TODO Will have to change this for different N
+            for (int row = 0; row < board.rows; row++) {
                 int in_a_row = 0;
                 int max = 0;
 
-                for (int offset = 0; offset <= N; offset++) {  // TODO Will have to change this for different N
+                for (int offset = 0; offset <= N; offset++) {
                     //System.out.println("Check Diagonal Back:" + " row:" + (row + offset) + " col: " + (column - offset) );
                     int value = getValue(board, row + offset, column - offset);
 
@@ -179,7 +179,7 @@ public class Heuristic {
                     }
                 }
 
-                hVal += deltaheurestic(max);
+                hVal += deltaheurestic(max, board.winNumber);
             }
         }
 
@@ -196,12 +196,30 @@ public class Heuristic {
         return -1;
     }
 
-    public static int deltaheurestic(int max) {
+    public static int deltaheurestic(int max, int N) {
         int h = (int)Math.pow(max, max);
 
         if (max == N) { h = (int)Math.pow(h, max); } 
 
         return h;
     }
+
+    public static int distributionScore(Board board, int player_turn) {
+        int[][] data = board.getBoardMatrix();
+        int score = 0;
+        for(int i = 0; i < board.rows; i++){
+            for(int j = 0; j < board.columns; j++) {
+                if( data[i][j] == player_turn) {
+                    score += Math.abs(board.winNumber - i);
+                    score += Math.abs(board.winNumber - j);
+                } else if( data[i][j] == Math.abs(player_turn - 3)) {
+                    score -= Math.abs(board.winNumber - i);
+                    score -= Math.abs(board.winNumber - j);
+                }
+            }
+        }
+    return score;
+    }
+
 
 }
