@@ -1,3 +1,8 @@
+/*
+    Written By Andrew Robbertz alrobbertz@wpi.edu and Trevor Dowd tddowd@wpi.edu
+    Last Update: 09/03/18
+ */
+
 package Utilities;
 
 public class Heuristic {
