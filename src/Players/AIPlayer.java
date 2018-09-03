@@ -12,7 +12,7 @@ public class AIPlayer extends Player {
     
     //
     public AIPlayer(String name, int turn, int time_limit) {
-        super(name, turn, time_limit); //TODO figure out the units for time_limit
+        super(name, turn, time_limit); 
         this.usedPop = false;
     }
     //function to find the best move from the state tree
@@ -52,7 +52,7 @@ public class AIPlayer extends Player {
         Action bestAction = new Action(false, -1);
         long searchTime = 0;
         //for loop that checks at deeper and deeper levels as time permits
-        for (int depth = 0;  (5*searchTime) < permittedTime; depth++) {
+        for (int depth = 1;  (5*searchTime) < permittedTime; depth++) {
             //uses ab search to find the best move at the given depth
             System.out.println("ID-SEARCH @depth: " + depth);
             this.maxPly = depth;
