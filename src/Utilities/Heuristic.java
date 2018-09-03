@@ -1,28 +1,31 @@
 package Utilities;
 
 public class Heuristic {
-
+    //assigns a value on the viabilty of each move
     public static int utility(Board board, int player_turn) {
+        //creates a copy of the board
         int[][] data = board.getCopy().getBoardMatrix();
+        //number of consecutive pieces that is required for a win
         int N = board.winNumber;
 
         int hVal = 0;
 
-        // Check horizontal
+        // Checks the board for the horizontal pieces
         for (int row = 0; row < board.rows; row++) {
             for (int column = 0; column < board.columns - N; column++) { // TODO Will have to change this for different N
                 int in_a_row = 0;
                 int max = 0;
                 int startc = -1;
                 int startr = -1;
-
+                //checks to see pieces in a horizontal row
                 for (int offset = 0; offset <= N; offset++) { // TODO Will have to change this for different N
                     //System.out.println("Check Horizontal:" + " row:" + row + " col: " + (column + offset) );
                     int value = data[row][column + offset];
-
+                    //checks if value matches the players turn
                     if (value == player_turn)
                     {
                         in_a_row += 1;
+                        //sets the new max for consecutive pieces
                         if (in_a_row > max) {
                             max = in_a_row;
 
