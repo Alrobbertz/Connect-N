@@ -16,10 +16,13 @@ public class AIExperiment extends Player {
     boolean usedPop;
     //integer to decied the max play
     int maxPly;
+    //integer for play time
+    long permittedTime;
 
     //
     public AIExperiment(String name, int turn, int time_limit) {
         super(name, turn, time_limit); //TODO figure out the units for time_limit
+        permittedTime = time_limit * (long) (Math.pow(10, 9));
         this.usedPop = false;
     }
 
@@ -31,7 +34,6 @@ public class AIExperiment extends Player {
         //long that holds a starting time to use in calculation of when to stop the move
         long start_time = System.nanoTime();
         //gets the real time limit
-        long permittedTime = 10 * (long) (Math.pow(10, 9)); //TODO change this to real time_limit
         System.out.println("Start Time: " + start_time / (long)(Math.pow(10, 9)) + " seconds");
         System.out.println("Permitted Time: " + permittedTime / (long)(Math.pow(10, 9)) + " seconds");
 
