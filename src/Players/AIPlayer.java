@@ -116,14 +116,18 @@ public class AIPlayer extends Player {
     }
 
     @SuppressWarnings("Duplicates")
+    //finds the maxium value from alpha beta search
     public double maxValueAB(Board board, int currentPly, double alpha, double beta) {
         //System.out.println("== MAX-VALUE Depth: " + currentPly + " A: " + alpha + " B: " + beta + " ==");
+        //checks to find if the play if has the max value
         if(terminalTest(board) || currentPly > maxPly) {
             //System.out.println("Leaf State Reached in MAX-VALUE");
             return Heuristic.utility(board, this.turn);
         }
         double val = Double.NEGATIVE_INFINITY;
+        //sets an array of possible actions that can be taken
         ArrayList<Action> possible_actions = board.getActions();
+        //loops through those actions and preforms alpha beta pruning
         for(Action action : possible_actions) {
             val = Math.max(val, minValueAB(result(board.getCopy(), action), currentPly + 1, alpha, beta));
             if(val >= beta) {
@@ -138,11 +142,13 @@ public class AIPlayer extends Player {
     @SuppressWarnings("Duplicates")
     public double minValueAB(Board board, int currentPly, double alpha, double beta) {
         //System.out.println("== MIN-VALUE Depth: " + currentPly + " A: " + alpha + " B: " + beta + " ==");
+        //checks to see if the min value play has been reached
         if(terminalTest(board) || currentPly > maxPly) {
             //System.out.println("Leaf State Reached in MIN-VALUE");
             return Heuristic.utility(board, this.turn);
         }
         double val = Double.POSITIVE_INFINITY;
+        //goes through a loop of all possible actions that can be done
         ArrayList<Action> possible_actino = board.getActions();
         for( Action action : possible_actino) {
             val = Math.min(val, maxValueAB(result(board.getCopy(), action), currentPly + 1, alpha, beta));
@@ -157,67 +163,80 @@ public class AIPlayer extends Player {
     // ==============  For MINIMAX =================
 
     @SuppressWarnings("Duplicates")
-    //function for use in minimax
+    //function for use of minimax
     public Action minimax(Board board, int currentPly) {
+        //sets intial values for bestValue and bestAction which will hold the best value move and the action to make the best move 
         double bestValue = Double.NEGATIVE_INFINITY;
         Action bestAction = new Action(false, -1);
+        // gets array of all possible actions and loops throught them
         ArrayList<Action> possible_actions = board.getActions();
         for (Action action : possible_actions) {
+            //creates copy of the board
             Board copyBoard = board.getCopy();
+            //
             action.setValue(minValue(result(copyBoard, action), currentPly + 1));
-
+            //checks if the current action is better then the previous best action
             if (action.getValue() > bestValue) {
+                //sets it as the new best action
                 bestValue = action.getValue();
                 bestAction = action;
             }
         }
-
+        //returns the action with the highest calculated value
         return bestAction;
     }
 
     @SuppressWarnings("Duplicates")
+    //finds the max value for minimax
     public double maxValue(Board board, int currentPly) {
         System.out.println("== MAX-VALUE Depth: " + currentPly + " ==");
+        //checks to see if the current play has the max value
         if (terminalTest(board) || currentPly > maxPly) {
             System.out.println("Leaf State Reached in MAX-VALUE");
             return Heuristic.utility(board, this.turn);
         }
 
         double val = Double.NEGATIVE_INFINITY;
+        //array of possible actions
         ArrayList<Action> possible_actions = board.getActions();
         System.out.println(possible_actions);
+        //loops through actions
         for (Action action : possible_actions) {
             //System.out.println("Checking Action: " + action);
             val = Math.max(val, minValue(result(board.getCopy(), action), currentPly + 1));
         }
-
+        //returns the max value
         return val;
     }
 
     @SuppressWarnings("Duplicates")
+    //find the minimum value for mini max
     public double minValue(Board board, int currentPly) {
         System.out.println("== MIN-VALUE Depth: " + currentPly + " ==");
+        //checks to see if the min value is the current play
         if (terminalTest(board) || currentPly > maxPly) {
             System.out.println("Leaf State Reached in MIN-VALUE");
             return Heuristic.utility(board, this.turn);
         }
 
         double val = Double.POSITIVE_INFINITY;
+        //list of possible actions
         ArrayList<Action> possible_actions = board.getActions();
         System.out.println(possible_actions);
+        //loops through actions
         for (Action action : possible_actions) {
             //System.out.println("Checking Action: " + action);
             val = Math.min(val, maxValue(result(board.getCopy(), action), currentPly + 1));
         }
-
+        //returns min value
         return val;
     }
 
-
+   //function that checks if this is a board that has already won
     public boolean terminalTest(Board board) {
         return Referee.checkForWinner(board) != 0;
     }
-
+    //makes the move on the board and returns the board
     public Board result(Board board, Move move) {
         board.makeMove(move);
         return board;
