@@ -5,19 +5,23 @@ import Utilities.*;
 import java.util.ArrayList;
 
 public class AIPlayer extends Player {
-
+    //boolean to see if the pop move was used
     boolean usedPop;
+    //integer to decied the max play
     int maxPly;
-
+    
+    //
     public AIPlayer(String name, int turn, int time_limit) {
         super(name, turn, time_limit); //TODO figure out the units for time_limit
         this.usedPop = false;
     }
-
+    //function to find the best move from the state tree
     public Move getMove(StateTree state) {
+        //create the new current board
         Board current_board = new Board(state);
-
+        //long that holds a starting time to use in calculation of when to stop the move
         long start_time = System.nanoTime();
+        //gets the real time limit
         long permittedTime = 10 * (long) (Math.pow(10, 9)); //TODO change this to real time_limit
         System.out.println("Start Time: " + start_time / (long)(Math.pow(10, 9)) + " seconds");
         System.out.println("Permitted Time: " + permittedTime / (long)(Math.pow(10, 9)) + " seconds");
@@ -31,58 +35,74 @@ public class AIPlayer extends Player {
         //Action your_move = abSearch(current_board, 0);
 
         // FOR ITERATIVE-DEEPENING
+        //calls the iterative deeping function to find the uptimal move
         Action your_move = iterativeDeep(current_board, start_time, permittedTime);
-
+        //checks if move was a pop
         if (your_move.getPop()) {
             usedPop = true;
         }
+        //returns the best move
         return new Move(your_move.getPop(), your_move.getColumn());
     }
 
     // ==============  For Iterative Deepening Search =================
-
+    // 
     public Action iterativeDeep(Board board, long startTime, long permittedTime) {
+        //
         Action bestAction = new Action(false, -1);
         long searchTime = 0;
+        //for loop that checks at deeper and deeper levels as time permits
         for (int depth = 0;  (5*searchTime) < permittedTime; depth++) {
+            //uses ab search to find the best move at the given depth
             System.out.println("ID-SEARCH @depth: " + depth);
             this.maxPly = depth;
             bestAction = abSearch(board, 0);
             searchTime = (System.nanoTime() - startTime);
         }
+        //returns the best action at the given depth that the loop was able to reach
         return bestAction;
     }
 
     // ==============  For Alpha-Beta Pruning =================
 
     @SuppressWarnings("Duplicates")
+    //alpha beta pruning that returns the best action at the current play level
     public Action abSearch(Board board, int currentPly){
+        //an array of actions that are valid moves
         ArrayList<Action> possible_actions = board.getActions();
         Action bestAction = new Action(false, -1);
-
+        //finds the max utility of the actions
         double val = findMax(board, currentPly, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, possible_actions);
-
+        //sets a value to hold the best move
         double bestValue = Double.NEGATIVE_INFINITY;
         //System.out.println("Actions: " + possible_actions);
         //System.out.println("Searching For: " + val);
+        // for loop that goes through each possible action and determines which is best
         for(Action action : possible_actions){
+            //compares each value to the best value for each action
             if(action.getValue() > bestValue){
                 //System.out.println("FOUND BEST VALUE");
+                //if it is greater value then the action is set as new best value
                 bestValue = action.getValue();
                 bestAction = action;
             }
         }
+        //returns the best action found
         return bestAction;
     }
 
     @SuppressWarnings("Duplicates")
+    //function that finds the max play on the board using a-b prunning 
     public double findMax(Board board, int currentPly, double alpha, double beta, ArrayList<Action> givenActions){
         //System.out.println("== MAX-VALUE Depth: " + currentPly + " A: " + alpha + " B: " + beta + " ==");
+        //finds if the current play has reached the max play value
         if(terminalTest(board) || currentPly > maxPly) {
             //System.out.println("Leaf State Reached in MAX-VALUE");
+            //returns the utility of this turn
             return Heuristic.utility(board, this.turn);
         }
         double val = Double.NEGATIVE_INFINITY;
+        //goes through the actions and prunes according to ab pruning
         for(Action action : givenActions) {
             val = Math.max(val, minValueAB(result(board.getCopy(), action), currentPly + 1, alpha, beta));
             action.setValue(val);
@@ -137,6 +157,7 @@ public class AIPlayer extends Player {
     // ==============  For MINIMAX =================
 
     @SuppressWarnings("Duplicates")
+    //function for use in minimax
     public Action minimax(Board board, int currentPly) {
         double bestValue = Double.NEGATIVE_INFINITY;
         Action bestAction = new Action(false, -1);
