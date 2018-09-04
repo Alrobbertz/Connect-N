@@ -14,10 +14,12 @@ public class AIPlayer extends Player {
     boolean usedPop;
     //integer to decied the max play
     int maxPly;
+    long permittedTime;
     
     //
     public AIPlayer(String name, int turn, int time_limit) {
         super(name, turn, time_limit); 
+        permittedTime = time_limit*(long) (Math.pow(10, 9));
         this.usedPop = false;
     }
     //function to find the best move from the state tree
@@ -26,11 +28,6 @@ public class AIPlayer extends Player {
         Board current_board = new Board(state);
         //long that holds a starting time to use in calculation of when to stop the move
         long start_time = System.nanoTime();
-        //gets the real time limit
-        long permittedTime = 10 * (long) (Math.pow(10, 9)); //TODO change this to real time_limit
-        System.out.println("Start Time: " + start_time / (long)(Math.pow(10, 9)) + " seconds");
-        System.out.println("Permitted Time: " + permittedTime / (long)(Math.pow(10, 9)) + " seconds");
-
 
         // FOR MINIMAX
         //Action your_move = minimax(current_board, 0);
@@ -59,7 +56,6 @@ public class AIPlayer extends Player {
         //for loop that checks at deeper and deeper levels as time permits
         for (int depth = 1;  (5*searchTime) < permittedTime; depth++) {
             //uses ab search to find the best move at the given depth
-            System.out.println("ID-SEARCH @depth: " + depth);
             this.maxPly = depth;
             bestAction = abSearch(board, 0);
             searchTime = (System.nanoTime() - startTime);
@@ -146,7 +142,7 @@ public class AIPlayer extends Player {
 
     @SuppressWarnings("Duplicates")
     public double minValueAB(Board board, int currentPly, double alpha, double beta) {
-        //System.out.println("== MIN-VALUE Depth: " + currentPly + " A: " + alpha + " B: " + beta + " ==");
+       
         //checks to see if the min value play has been reached
         if(terminalTest(board) || currentPly > maxPly) {
             //System.out.println("Leaf State Reached in MIN-VALUE");
