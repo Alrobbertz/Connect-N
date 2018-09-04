@@ -215,11 +215,11 @@ public class Heuristic {
         for(int i = 0; i < board.rows; i++){
             for(int j = 0; j < board.columns; j++) {
                 if( data[i][j] == player_turn) {
-                    score += Math.abs(board.winNumber - i);
-                    score += Math.abs(board.winNumber - j);
+                    score += Math.abs(board.rows/2 - i);
+                    score += Math.abs(board.columns/2 - j);
                 } else if( data[i][j] == Math.abs(player_turn - 3)) {
-                    score -= Math.abs(board.winNumber - i);
-                    score -= Math.abs(board.winNumber - j);
+                    score -= Math.abs(board.rows/2 - i);
+                    score -= Math.abs(board.columns/2 - j);
                 }
             }
         }

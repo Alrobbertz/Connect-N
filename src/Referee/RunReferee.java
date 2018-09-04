@@ -25,7 +25,7 @@ public class RunReferee {
 		
 		
 		
-		Player player1 = (Player) new LinePlayer("LinePlayer", 1, timeLimit);
+		Player player1 = (Player) new AIPlayer("AIPlayer", 1, timeLimit);
 		Player player2 = (Player) new AIExperiment("AIExperiment", 2, timeLimit);
 
 		Referee referee = new Referee();
